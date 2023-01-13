@@ -31,6 +31,7 @@
 , nspr
 , nss
 , systemd
+, unzip
 , which
 , callPackage
 , darwin
@@ -40,9 +41,8 @@ let
   flutter = stdenv.mkDerivation {
     name = "${drvName}-unwrapped";
 
-    nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.DarwinTools
-    ];
+    nativeBuildInputs = [ unzip ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
     buildInputs = [ git ];
 
@@ -74,8 +74,8 @@ let
       echo "$revision" > "$STAMP_PATH"
       echo -n "${version}" > version
 
-      rm -r bin/cache/{artifacts,dart-sdk,downloads}
-      rm bin/cache/*.stamp
+      rm -r $FLUTTER_ROOT/bin/cache/{artifacts,dart-sdk,downloads}
+      rm $FLUTTER_ROOT/bin/cache/*.stamp
     '';
 
     installPhase = ''
@@ -186,7 +186,7 @@ runCommand drvName
     '';
     homepage = "https://flutter.dev";
     license = licenses.bsd3;
-    platforms = [ "x86_64-linux" "aarch64-linux" ] ++ optionals (versionOlder "3.0.0" version) [ "aarch64-darwin" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ] ++ optionals (versionOlder "3.0.0" version) [ "x86_64-darwin" "aarch64-darwin" ];
     maintainers = with maintainers; [ babariviere ericdallo h7x4 ];
   };
 } ''
