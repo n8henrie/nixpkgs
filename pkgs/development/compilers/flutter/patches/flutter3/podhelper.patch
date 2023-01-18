@@ -1,0 +1,21 @@
+diff --git a/packages/flutter_tools/bin/podhelper.rb b/packages/flutter_tools/bin/podhelper.rb
+index 54238860d5..d7c24014f2 100644
+--- a/packages/flutter_tools/bin/podhelper.rb
++++ b/packages/flutter_tools/bin/podhelper.rb
+@@ -38,7 +38,7 @@ def flutter_additional_ios_build_settings(target)
+
+   # This podhelper script is at $FLUTTER_ROOT/packages/flutter_tools/bin.
+   # Add search paths from $FLUTTER_ROOT/bin/cache/artifacts/engine.
+-  artifacts_dir = File.join('..', '..', '..', '..', 'bin', 'cache', 'artifacts', 'engine')
++  artifacts_dir = File.join(ENV['HOME'], '.cache/flutter/artifacts/engine')
+   debug_framework_dir = File.expand_path(File.join(artifacts_dir, 'ios', 'Flutter.xcframework'), __FILE__)
+
+   unless Dir.exist?(debug_framework_dir)
+@@ -113,7 +113,7 @@ def flutter_additional_macos_build_settings(target)
+
+   # This podhelper script is at $FLUTTER_ROOT/packages/flutter_tools/bin.
+   # Add search paths from $FLUTTER_ROOT/bin/cache/artifacts/engine.
+-  artifacts_dir = File.join('..', '..', '..', '..', 'bin', 'cache', 'artifacts', 'engine')
++  artifacts_dir = File.join(ENV['HOME'], '.cache/flutter/artifacts/engine')
+   debug_framework_dir = File.expand_path(File.join(artifacts_dir, 'darwin-x64'), __FILE__)
+   release_framework_dir = File.expand_path(File.join(artifacts_dir, 'darwin-x64-release'), __FILE__)

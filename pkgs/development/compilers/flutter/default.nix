@@ -70,6 +70,7 @@ in
     patches = [
       ./patches/flutter3/disable-auto-update.patch
       ./patches/flutter3/git-dir.patch
+      ./patches/flutter3/podhelper.patch
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux ./patches/flutter3/move-cache-linux.patch
     ++ lib.optional stdenv.hostPlatform.isDarwin ./patches/flutter3/move-cache-darwin.patch;
