@@ -28,6 +28,7 @@
   testers,
   nixosTests,
   fetchpatch,
+  darwin,
 }:
 # espanso does not support building with both X11 and Wayland support at the same time
 assert stdenv.hostPlatform.isLinux -> x11Support != waylandSupport;
@@ -115,12 +116,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
 
   # Some tests require networking
-  doCheck = false;
+  doCheck = true;
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ${lib.getExe' darwin.sigtool "codesign"} \
+      -f -s - -i com.federicoterzi.espanso \
+      "$out/bin/espanso"
+  '';
 
   postInstall =
     if stdenv.hostPlatform.isDarwin then
       ''
         ${stdenv.shell} ./scripts/create_bundle.sh $out/bin/espanso
+
+        # `create_bundle.sh` *copies* the binary; macos expects a binary
+        # (not symlink) in the app bundle, but we don't need both
+        rm $out/bin/espanso
+        ln -s $out/Applications/Espanso.app/Contents/MacOS/espanso $out/bin/
       ''
     else
       ''
